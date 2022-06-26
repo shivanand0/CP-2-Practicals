@@ -1,17 +1,22 @@
 // Weights and Measures
 
-#include <iostream> #include <vector> #include <cstring> #include <limits> #include <algorithm> using namespace std;
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <limits>
+#include <algorithm>
+using namespace std;
 
 struct Turtle {
   int w, s;
 };
 
-bool comp(const Turtle & t1,
-  const Turtle & t2) {
+bool comp(const Turtle &t1 , const Turtle &t2)
+{
   return t1.s < t2.s;
 }
 
-vector < Turtle > T;
+vector<Turtle>T;
 int dp[5607];
 
 void solve() {
@@ -26,12 +31,12 @@ void solve() {
     for (int j = maxNTurtles; j >= 0; --j)
       // Try to put turtle i below the current stack of j turtles.
       // 1.Turtle i can carry the stack plus itself.
-      // 2.They produce a smaller weight for the current stack of j+1 turtles. if (T[i].s >= dp[j] + T[i].w
-      &&
-      T[i].w + dp[j] < dp[j + 1]) {
-  dp[j + 1] = dp[j] + T[i].w;
-  maxNTurtles = max(maxNTurtles, j + 1);
-}
+      // 2.They produce a smaller weight for the current stack of j+1 turtles.
+      if (T[i].s >= dp[j] + T[i].w && T[i].w + dp[j] < dp[j + 1])
+      {
+        dp[j + 1] = dp[j] + T[i].w;
+        maxNTurtles = max(maxNTurtles, j + 1);
+      }
 
 cout << maxNTurtles << endl;
 }
@@ -41,4 +46,5 @@ int main() {
   while (cin >> t.w >> t.s) T.push_back(t);
 
   solve();
+  return 0;
 }
