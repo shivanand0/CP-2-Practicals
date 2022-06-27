@@ -1,26 +1,28 @@
-// Ant on a Chessboard
+ #include <iostream>
+ #include <cmath>
+ using namespace std;
 
-#include<cmath> 
-#include<cstdio>
-
-int n, x, y;
-int main() {
-  for (;;) {
-    scanf("%d", & n);
-    if (n == 0) break;
-
-    int root = ceil(sqrt(n));
-    int c = root * root - root + 1;
-    x = y = root;
-
-    if (root % 2 == 0) {
-      if (n > c) y -= n - c;
-      else x -= c - n;
-    } else {
-      if (n > c) x -= n - c;
-      else y -= c - n;
-    }
-
-    printf("%d %d\n", x, y);
-  }
-}
+ int main(int ac, char *av[])
+ {
+     int step;
+     while (cin >> step, step)
+     { // determines the column or row in which the step number is located.
+          int column = (int)ceil(sqrt(step));
+          //Determine the number on the diagonal:column * (column - 1) + 1.
+           int diagonal = column * (column - 1) + 1;
+           //Positions are determined based on diagonal numbers and the relationship of step numbers to diagonal numbers.
+           if (column & 1)
+            { if (step >= diagonal)
+                cout << (column - (step - diagonal)) << " " << column << endl;
+              else cout << column << " " << (column - (diagonal - step)) << endl;
+            }
+            else
+            {
+                if (step >= diagonal)
+                    cout << column << " " << (column - (step - diagonal)) << endl;
+                else
+                    cout << (column - (diagonal - step)) << " " << column << endl;
+            }
+      }
+      return 0;
+ }
