@@ -1,51 +1,78 @@
 // : Is Bigger Smarter?
 
-#include <cstdio> 
+#include <iostream>
+#include <vector>
 #include <algorithm>
-
 using namespace std;
-struct E {
-  int ind, W, S;
 
-  E() {}
-  E(int _ind, int _W, int _S) {
-    ind = _ind;
-    W = _W;
-    S = _S;
+class Elephant {
+public:
+  Elephant() {}
+
+  Elephant(int aw, int as, int ai) : w(aw), s(as), i(ai) {}
+
+  bool operator <(const Elephant & e) const {
+    return w < e.w;
   }
 
-  bool operator < (E X) const {
-    if (W != X.W) return W < X.W;
-    return S > X.S;
-  }
+  int w;  //weight
+  int s;  //smartness
+  int i;  //order
 };
 
-int main() {
-  int n = 0, W, S;
-  E a[1000];
+class Result {
+public:
+  Result() : max(0), next(0) {}
 
-  while (scanf("%d %d", & W, & S) == 2) a[n] = E(++n, W, S);
-  sort(a, a + n);
-  int dp[n], next[n], ans = 0, start;
-  for (int i = n - 1; i >= 0; i--) {
-    dp[i] = 1;
-    next[i] = -1;
-
-    for (int j = i + 1; j < n; j++) {
-      if (a[i].W < a[j].W && a[i].S > a[j].S && 1 + dp[j] > dp[i]) {
-        dp[i] = 1 + dp[j];
-        next[i] = j;
-      }
-    }
-
-    if (dp[i] > ans) {
-      ans = dp[i];
-      start = i;
-    }
+  bool operator <(const Result & r) const {
+    return max < r.max;
   }
 
-  printf("%d\n", ans);
-  for (int i = start; i != -1; i = next[i]) printf("%d\n", a[i].ind);
+  int max;  //max number of elephant in seq
+  int next; //next elephant number in seq
+};
 
+vector<int> max_seq(vector<Elephant> & ele) {
+  int n = ele.size();
+  vector<Result> results(n);
+  sort(ele.begin(), ele.end());
+  results[n - 1].max = 1;
+  for (int i = n - 2; i >= 0; i--) {
+    Elephant & e = ele[i];
+    int max = 0;
+    int maxi = 0;
+    for (int k = i + 1; k < n; k++) {
+      Elephant & e2 = ele[k];
+      if (e.w < e2.w && e.s > e2.s && max < results[k].max) {
+        max = results[k].max;
+        maxi = k;
+      }
+    }
+    results[i].max = max + 1;
+    results[i].next = maxi;
+  }
+  //build path
+  vector<Result>::iterator it = max_element(results.begin(), results.end());
+  int next = it->next;
+  vector<int> r;
+  r.push_back(ele[it - results.begin()].i);
+  while (next) {
+    r.push_back(ele[next].i);
+    next = results[next].next;
+  }
+  return r;
+}
+
+int main() {
+  int w, s;
+  int c = 0;
+  vector<Elephant> ele;
+  while (cin >> w >> s) {
+    ele.push_back(Elephant(w, s, ++c));
+  }
+  vector<int> seq = max_seq(ele);
+  cout << seq.size() << endl;
+  for (int i = 0; i < seq.size(); i++)
+    cout << seq[i] << endl;
   return 0;
 }
