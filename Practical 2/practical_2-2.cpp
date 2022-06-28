@@ -1,76 +1,48 @@
-// Smith numbers
+//Smith Number
 
-#include <bits/stdc++.h>
-using namespace std; 
-vector<int> get_primes() {
-    vector<int> primes;
-    vector<bool> sieve(100000, true);
-
-    for (int i = 2; i < 100000; i++) 
-    { 
-        if (sieve[i]) {
-            primes.push_back(i); 
-            int j = 2;
-
-            while (i * j < 100000) 
-            { 
-                sieve[i * j] = false;
-                j++;
-            }
-        }
-    }
-    return primes;
-}
-
-int sum_of_digits(int n) 
-{ 
-    int sum = 0;
-    while (n) 
-    {
-        sum += n % 10; n /= 10;
-    }
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+int count(int n) {
+    char s[12];
+    sprintf(s, "%d", n);
+    int i, sum = 0;
+    for(i = 0; s[i]; i++)
+        sum += s[i]-'0';
     return sum;
 }
-
-int main() 
-{
-    vector<int> primes = get_primes(); 
-    int T;
-    scanf("%d", &T);
-
-    while (T--) 
-    { 
-        int N;
-        scanf("%d", &N);
-
-        while (true) 
-        { 
-            N++;
-            int sum = sum_of_digits(N); 
-            int prime_sum = 0;
-
-            int temp = N, index = 0; int factors = 0;
-
-            while (temp > 1 && primes[index] <= sqrt(temp)) 
-            { 
-                if (temp % primes[index] == 0) 
-                {
-                    prime_sum += sum_of_digits(primes[index]); 
-                    temp /= primes[index];
-                    factors++;
-                }
-                else
-                    index++;
+int C(int n) {
+    int i, ans;
+    int digits1 = count(n), digits2 = 0, flag = 1;
+    ans = n;
+    for(i = 2; i <= (int)sqrt(n); i++) {
+        if(n%i == 0) {
+            int time = 0;
+            while(n%i == 0) {
+                time++;
+                n /= i;
             }
-            
-            if (temp != 1) 
-                prime_sum += sum_of_digits(temp); factors += 1;
-
-            if (sum == prime_sum && factors > 1) 
-            { 
-                printf("%d\n", N);
-                break;
-            }
+            digits2 += time*count(i);
+            flag = 0;
         }
     }
+    if(n != 1)
+        digits2 += count(n);
+    if(digits1 == digits2 && flag == 0) {
+        printf("%d\n", ans);
+        return 1;
+    }
+    return 0;
+}
+int main() {
+    int i;
+    int T, n;
+    scanf("%d", &T);
+    while(T--) {
+        scanf("%d", &n);
+        for(i = n+1; ; i++)
+            if(C(i) == 1)
+                break;
+    }
+    return 0;
 }
