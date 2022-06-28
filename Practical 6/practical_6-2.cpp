@@ -1,9 +1,9 @@
 // Hanoi towers
 
-#include <cstdio> 
-#include <cmath> 
-#include <cstring> 
-using namespace std;
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+
 
 int t, n;
 int tot;
@@ -29,15 +29,19 @@ void backtrack(int cur, int pos) {
   backtrack(cur, pos + 1);
 }
 
-int main() {
+int main()
+{
+  printf("Enter the test cases numbers :\n");
   scanf("%d", & t);
 
   while (t--) {
     tot = 0;
+    printf("Number Of Pegs :");
     scanf("%d", & n);
     memset(arr, 0, sizeof arr);
     backtrack(1, 0);
     printf("%d\n", tot);
+    printf("-------------------\n");
 
   }
 }
