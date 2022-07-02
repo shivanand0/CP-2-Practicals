@@ -1,12 +1,15 @@
 //  Distinct Subsequences
 
-#include <iostream> 
-#include <iomanip> 
-#include <vector> 
+#include <iostream>
+#include <iomanip>
+#include <vector>
 #include <algorithm>
+#define MAXZ 101
 
 using namespace std;
-#define MAXZ 101 class integer {
+
+class integer
+{
   friend ostream & operator << (ostream&, const integer & );
 
   public:

@@ -1,6 +1,7 @@
 //Light More Light
-#include<cstdio> 
-#include<cmath>
+
+#include<stdio.h> 
+#include<math.h>
 
 int main()
 {
